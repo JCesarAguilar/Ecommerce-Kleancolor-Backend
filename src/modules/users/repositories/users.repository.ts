@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { User } from '../entities/user.entity';
+import { UserResponseDto } from '../dto/user-response.dto';
 
 @Injectable()
 export class UserRepository {
@@ -24,7 +25,47 @@ export class UserRepository {
     },
   ];
 
-  findAll(): User[] {
-    return this.users;
+  getAllUsers(): UserResponseDto[] {
+    return this.users.map(
+      ({ id, name, email, phone, address, country, city }) => ({
+        id,
+        name,
+        email,
+        phone,
+        address,
+        country,
+        city,
+      }),
+    );
+  }
+
+  getById(id: number): UserResponseDto | null {
+    const user = this.users.find((user) => user.id === id);
+    if (!user) return null;
+
+    const { id: userId, name, email, phone, address, country, city } = user;
+    return { id: userId, name, email, phone, address, country, city };
+  }
+
+  createUser(user: Omit<User, 'id'>): number {
+    const id = this.users.length + 1;
+    this.users = [...this.users, { id, ...user }];
+    return id;
+  }
+
+  updateUser(id: number, data: Partial<User>): number | undefined {
+    const index = this.users.findIndex((user) => user.id === id);
+    if (index === -1) return undefined;
+
+    this.users[index] = { ...this.users[index], ...data };
+    return id;
+  }
+
+  deleteUser(id: number): number | undefined {
+    const index = this.users.findIndex((user) => user.id === id);
+    if (index === -1) return undefined;
+
+    this.users.splice(index, 1);
+    return id;
   }
 }
