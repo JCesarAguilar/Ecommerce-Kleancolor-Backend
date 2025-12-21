@@ -12,7 +12,7 @@ export class UsersService {
     return this.userRepository.getAllUsers(page, limit);
   }
 
-  getUserById(id: number): UserResponseDto | null {
+  getUserById(id: string): UserResponseDto | null {
     return this.userRepository.getUserById(id);
   }
 
@@ -20,11 +20,11 @@ export class UsersService {
     return this.userRepository.createUser(user);
   }
 
-  updateUser(id: number, user: UpdateUserDto) {
+  updateUser(id: string, user: UpdateUserDto) {
     return this.userRepository.updateUser(id, user);
   }
 
-  deleteUser(id: number) {
+  deleteUser(id: string) {
     return this.userRepository.deleteUser(id);
   }
 }

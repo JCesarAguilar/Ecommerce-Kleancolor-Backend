@@ -12,7 +12,7 @@ export class ProductsService {
     return this.productRepository.getProducts(page, limit);
   }
 
-  getProductById(id: number): Product | null {
+  getProductById(id: string): Product | null {
     return this.productRepository.getProductById(id);
   }
 
@@ -20,11 +20,11 @@ export class ProductsService {
     return this.productRepository.createProduct(product);
   }
 
-  updateProduct(id: number, product: UpdateProductDto) {
+  updateProduct(id: string, product: UpdateProductDto) {
     return this.productRepository.updateProduct(id, product);
   }
 
-  deleteProduct(id: number) {
+  deleteProduct(id: string) {
     return this.productRepository.deleteProduct(id);
   }
 }

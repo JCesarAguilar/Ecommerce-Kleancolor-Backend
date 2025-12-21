@@ -21,8 +21,8 @@ import { AuthGuard } from '../auth/guards/auth.guard';
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
-  @HttpCode(200)
   @Get()
+  @HttpCode(200)
   getAll(
     @Query('page') page?: number,
     @Query('limit') limit?: number,
@@ -30,21 +30,21 @@ export class ProductsController {
     return this.productsService.getProducts(page, limit);
   }
 
-  @HttpCode(200)
   @Get(':id')
+  @HttpCode(200)
   getById(@Param('id', ParseIntPipe) id: number): Product | null {
     return this.productsService.getProductById(id);
   }
 
-  @HttpCode(201)
   @Post()
+  @HttpCode(201)
   @UseGuards(AuthGuard)
   createProduct(@Body() product: CreateProductDto) {
     return this.productsService.createProduct(product);
   }
 
-  @HttpCode(200)
   @Put('id')
+  @HttpCode(200)
   @UseGuards(AuthGuard)
   updateProduct(
     @Param('id', ParseIntPipe) id: number,
@@ -53,8 +53,8 @@ export class ProductsController {
     return this.productsService.updateProduct(id, product);
   }
 
-  @HttpCode(200)
   @Delete('id')
+  @HttpCode(200)
   @UseGuards(AuthGuard)
   deleteProduct(@Param('id', ParseIntPipe) id: number) {
     return this.productsService.deleteProduct(id);

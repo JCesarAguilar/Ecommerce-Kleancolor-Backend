@@ -21,8 +21,8 @@ import { AuthGuard } from '../auth/guards/auth.guard';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @HttpCode(200)
   @Get()
+  @HttpCode(200)
   @UseGuards(AuthGuard)
   getAll(
     @Query('page') page?: number,
@@ -31,21 +31,21 @@ export class UsersController {
     return this.usersService.getAllUsers(page, limit);
   }
 
-  @HttpCode(200)
   @Get(':id')
+  @HttpCode(200)
   @UseGuards(AuthGuard)
   getById(@Param('id', ParseIntPipe) id: number): UserResponseDto | null {
     return this.usersService.getUserById(id);
   }
 
-  @HttpCode(201)
   @Post()
+  @HttpCode(201)
   createUser(@Body() user: CreateUserDto) {
     return this.usersService.createUser(user);
   }
 
-  @HttpCode(200)
   @Put(':id')
+  @HttpCode(200)
   @UseGuards(AuthGuard)
   updateUser(
     @Param('id', ParseIntPipe) id: number,
@@ -54,8 +54,8 @@ export class UsersController {
     return this.usersService.updateUser(id, user);
   }
 
-  @HttpCode(200)
   @Delete(':id')
+  @HttpCode(200)
   @UseGuards(AuthGuard)
   deleteUser(@Param('id', ParseIntPipe) id: number) {
     return this.usersService.deleteUser(id);
