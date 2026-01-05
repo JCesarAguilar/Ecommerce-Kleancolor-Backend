@@ -5,7 +5,6 @@ import {
   Get,
   HttpCode,
   Param,
-  ParseIntPipe,
   Post,
   Put,
   Query,
@@ -13,8 +12,8 @@ import {
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { Product } from './entities/product.entity';
-import type { CreateProductDto } from './dto/create-product.dto';
-import type { UpdateProductDto } from './dto/update-product.dto';
+import type { CreateProductDto } from './dtos/create-product.dto';
+import type { UpdateProductDto } from './dtos/update-product.dto';
 import { AuthGuard } from '../auth/guards/auth.guard';
 
 @Controller('/products')
@@ -23,31 +22,31 @@ export class ProductsController {
 
   @Get()
   @HttpCode(200)
-  getAll(
+  async getAll(
     @Query('page') page?: number,
     @Query('limit') limit?: number,
-  ): Product[] {
-    return this.productsService.getProducts(page, limit);
+  ): Promise<Product[]> {
+    return this.productsService.getAllProducts(page, limit);
   }
 
   @Get(':id')
   @HttpCode(200)
-  getById(@Param('id', ParseIntPipe) id: number): Product | null {
+  async getById(@Param('id') id: string): Promise<Product | null> {
     return this.productsService.getProductById(id);
   }
 
   @Post()
   @HttpCode(201)
   @UseGuards(AuthGuard)
-  createProduct(@Body() product: CreateProductDto) {
+  async createProduct(@Body() product: CreateProductDto) {
     return this.productsService.createProduct(product);
   }
 
   @Put('id')
   @HttpCode(200)
   @UseGuards(AuthGuard)
-  updateProduct(
-    @Param('id', ParseIntPipe) id: number,
+  async updateProduct(
+    @Param('id') id: string,
     @Body() product: UpdateProductDto,
   ) {
     return this.productsService.updateProduct(id, product);
@@ -56,7 +55,7 @@ export class ProductsController {
   @Delete('id')
   @HttpCode(200)
   @UseGuards(AuthGuard)
-  deleteProduct(@Param('id', ParseIntPipe) id: number) {
+  async deleteProduct(@Param('id') id: string) {
     return this.productsService.deleteProduct(id);
   }
 }

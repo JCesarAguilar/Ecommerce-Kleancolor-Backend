@@ -1,30 +1,33 @@
 import { Injectable } from '@nestjs/common';
-import { ProductsRepository } from './repositories/products.repository';
+import { ProductsRepository } from './products.repository';
 import { Product } from './entities/product.entity';
-import type { CreateProductDto } from './dto/create-product.dto';
-import type { UpdateProductDto } from './dto/update-product.dto';
+import type { CreateProductDto } from './dtos/create-product.dto';
+import type { UpdateProductDto } from './dtos/update-product.dto';
 
 @Injectable()
 export class ProductsService {
   constructor(private readonly productRepository: ProductsRepository) {}
 
-  getProducts(page?: number, limit?: number): Product[] {
-    return this.productRepository.getProducts(page, limit);
+  async getAllProducts(page?: number, limit?: number): Promise<Product[]> {
+    return this.productRepository.getAllProducts(page, limit);
   }
 
-  getProductById(id: string): Product | null {
+  async getProductById(id: string): Promise<Product | null> {
     return this.productRepository.getProductById(id);
   }
 
-  createProduct(product: CreateProductDto) {
+  async createProduct(product: CreateProductDto): Promise<string> {
     return this.productRepository.createProduct(product);
   }
 
-  updateProduct(id: string, product: UpdateProductDto) {
+  async updateProduct(
+    id: string,
+    product: UpdateProductDto,
+  ): Promise<string | undefined> {
     return this.productRepository.updateProduct(id, product);
   }
 
-  deleteProduct(id: string) {
+  async deleteProduct(id: string): Promise<string | undefined> {
     return this.productRepository.deleteProduct(id);
   }
 }

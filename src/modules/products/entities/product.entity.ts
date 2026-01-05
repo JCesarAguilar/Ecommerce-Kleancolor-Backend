@@ -1,8 +1,10 @@
 import { Category } from 'src/modules/categories/entities/category.entity';
-import { OrderDetail } from 'src/modules/order-detail/entities/order-detail.entity';
+import { OrderDetail } from 'src/modules/orders/entities/order-detail.entity';
 import {
   Column,
   Entity,
+  JoinColumn,
+  JoinTable,
   ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
@@ -13,7 +15,7 @@ export class Product {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ length: 50, nullable: false })
+  @Column({ length: 50, nullable: false, unique: true })
   name: string;
 
   @Column({ type: 'text', nullable: false })
@@ -32,9 +34,11 @@ export class Product {
   })
   imgUrl: string;
 
-  @ManyToOne(() => Category, (category) => category.name)
+  @ManyToOne(() => Category, (category) => category.products)
+  @JoinColumn({ name: 'category_id' })
   category: Category;
 
-  @ManyToMany(() => OrderDetail, (order) => order.id)
-  order: OrderDetail;
+  @ManyToMany(() => OrderDetail, (orderDetail) => orderDetail.products)
+  @JoinTable()
+  orderDetails: OrderDetail[];
 }

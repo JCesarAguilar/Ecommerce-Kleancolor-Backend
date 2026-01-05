@@ -1,15 +1,14 @@
 import { Product } from 'src/modules/products/entities/product.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { v4 as uuid } from 'uuid';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'categories' })
 export class Category {
   @PrimaryGeneratedColumn('uuid')
-  id: string = uuid();
+  id: string;
 
-  @Column({ type: 'text', length: 50 })
+  @Column({ type: 'varchar', length: 50, nullable: false, unique: true })
   name: string;
 
-  @ManyToOne(() => Product, (product) => product.category)
-  product: Product;
+  @OneToMany(() => Product, (product) => product.category)
+  products: Product[];
 }

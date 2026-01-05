@@ -1,16 +1,26 @@
-import { OrderDetail } from 'src/modules/order-detail/entities/order-detail.entity';
+import { OrderDetail } from 'src/modules/orders/entities/order-detail.entity';
 import { User } from 'src/modules/users/entities/user.entity';
-import { Entity, ManyToOne, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { v4 as uuid } from 'uuid';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity({ name: 'orders' })
 export class Order {
   @PrimaryGeneratedColumn('uuid')
-  id: string = uuid();
+  id: string;
 
   @ManyToOne(() => User, (user) => user.orders)
+  @JoinColumn({ name: 'user_id' })
   user: User;
 
-  @OneToOne(() => OrderDetail, (order) => order.id)
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  date: Date;
+
+  @OneToOne(() => OrderDetail, (orderDetail) => orderDetail.order)
   orderDetail: OrderDetail;
 }

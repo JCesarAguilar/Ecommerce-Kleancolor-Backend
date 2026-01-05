@@ -30,5 +30,5 @@ export class User {
   city?: string;
 
   @OneToMany(() => Order, (order) => order.user)
-  orders?: Order[];
+  orders: Order[];
 }
