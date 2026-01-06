@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { User } from './entities/user.entity';
 import { UserResponseDto } from './dtos/user-response.dto';
 import { CreateUserDto } from './dtos/create-user.dto';
-import { UpdateUserDto } from './dtos/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { v4 as uuid } from 'uuid';
@@ -65,7 +64,7 @@ export class UserRepository {
     return savedUser.id;
   }
 
-  async updateUser(id: string, data: UpdateUserDto): Promise<User | null> {
+  async updateUser(id: string, data: CreateUserDto): Promise<User | null> {
     await this.usersRepository.update(id, data);
     return this.usersRepository.findOneBy({ id });
   }

@@ -13,7 +13,6 @@ import {
 import { UsersService } from './users.service';
 import type { UserResponseDto } from './dtos/user-response.dto';
 import type { CreateUserDto } from './dtos/create-user.dto';
-import type { UpdateUserDto } from './dtos/update-user.dto';
 import { AuthGuard } from '../auth/guards/auth.guard';
 
 @Controller('/users')
@@ -46,7 +45,7 @@ export class UsersController {
   @Put(':id')
   @HttpCode(200)
   @UseGuards(AuthGuard)
-  async updateUser(@Param('id') id: string, @Body() userInfo: UpdateUserDto) {
+  async updateUser(@Param('id') id: string, @Body() userInfo: CreateUserDto) {
     return this.usersService.updateUser(id, userInfo);
   }
 

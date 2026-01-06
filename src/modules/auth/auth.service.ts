@@ -5,13 +5,13 @@ import {
 } from '@nestjs/common';
 
 import { UserRepository } from '../users/users.repository';
-import { SignInDto } from './dto/login-user.dto';
+import { LoginUserDto } from './dtos/login-user.dto';
 
 @Injectable()
 export class AuthService {
   constructor(private readonly usersRepository: UserRepository) {}
 
-  async signin({ email, password }: SignInDto) {
+  async signin({ email, password }: LoginUserDto) {
     if (!email || !password)
       throw new BadRequestException('Faltan credenciales');
 
