@@ -30,4 +30,8 @@ export class ProductsService {
   async deleteProduct(id: string): Promise<string | undefined> {
     return this.productRepository.deleteProduct(id);
   }
+
+  async updateImgUrl(productId: string, imgUrl: string) {
+    return this.productRepository.updateImgUrl(productId, imgUrl);
+  }
 }

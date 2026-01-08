@@ -50,4 +50,8 @@ export class ProductsRepository {
       return id;
     }
   }
+
+  async updateImgUrl(id: string, imgUrl: string) {
+    await this.productRepository.update({ id }, { imgUrl });
+  }
 }

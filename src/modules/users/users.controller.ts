@@ -5,14 +5,15 @@ import {
   Get,
   HttpCode,
   Param,
+  ParseUUIDPipe,
   Post,
   Put,
   Query,
   UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import type { UserResponseDto } from './dtos/user-response.dto';
-import type { CreateUserDto } from './dtos/create-user.dto';
+import { UserResponseDto } from './dtos/user-response.dto';
+import { CreateUserDto } from './dtos/create-user.dto';
 import { AuthGuard } from '../auth/guards/auth.guard';
 
 @Controller('/users')
@@ -21,7 +22,7 @@ export class UsersController {
 
   @Get()
   @HttpCode(200)
-  @UseGuards(AuthGuard)
+  // @UseGuards(AuthGuard)
   async getAll(
     @Query('page') page?: number,
     @Query('limit') limit?: number,
@@ -31,8 +32,10 @@ export class UsersController {
 
   @Get(':id')
   @HttpCode(200)
-  @UseGuards(AuthGuard)
-  async getById(@Param('id') id: string): Promise<UserResponseDto | null> {
+  // @UseGuards(AuthGuard)
+  async getById(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ): Promise<UserResponseDto | null> {
     return this.usersService.getUserById(id);
   }
 
@@ -45,14 +48,19 @@ export class UsersController {
   @Put(':id')
   @HttpCode(200)
   @UseGuards(AuthGuard)
-  async updateUser(@Param('id') id: string, @Body() userInfo: CreateUserDto) {
+  async updateUser(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+    @Body() userInfo: CreateUserDto,
+  ) {
     return this.usersService.updateUser(id, userInfo);
   }
 
   @Delete(':id')
   @HttpCode(200)
-  @UseGuards(AuthGuard)
-  async deleteUser(@Param('id') id: string) {
+  // @UseGuards(AuthGuard)
+  async deleteUser(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ) {
     return this.usersService.deleteUser(id);
   }
 }

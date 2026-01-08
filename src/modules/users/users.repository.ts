@@ -1,10 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { User } from './entities/user.entity';
 import { UserResponseDto } from './dtos/user-response.dto';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { v4 as uuid } from 'uuid';
 
 @Injectable()
 export class UserRepository {
@@ -55,13 +54,15 @@ export class UserRepository {
     };
   }
 
-  async createUser(user: CreateUserDto): Promise<string> {
-    const newUser = this.usersRepository.create({
-      id: uuid(),
-      ...user,
-    });
-    const savedUser = await this.usersRepository.save(newUser);
-    return savedUser.id;
+  async createUser(user: CreateUserDto): Promise<User> {
+    try {
+      const newUser = this.usersRepository.create(user);
+      const savedUser = await this.usersRepository.save(newUser);
+      return savedUser;
+    } catch (err) {
+      console.error(err);
+      throw new NotFoundException('Error creating User');
+    }
   }
 
   async updateUser(id: string, data: CreateUserDto): Promise<User | null> {

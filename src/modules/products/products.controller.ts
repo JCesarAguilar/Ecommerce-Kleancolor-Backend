@@ -5,6 +5,7 @@ import {
   Get,
   HttpCode,
   Param,
+  ParseUUIDPipe,
   Post,
   Put,
   Query,
@@ -31,7 +32,9 @@ export class ProductsController {
 
   @Get(':id')
   @HttpCode(200)
-  async getById(@Param('id') id: string): Promise<Product | null> {
+  async getById(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ): Promise<Product | null> {
     return this.productsService.getProductById(id);
   }
 
@@ -46,7 +49,7 @@ export class ProductsController {
   @HttpCode(200)
   @UseGuards(AuthGuard)
   async updateProduct(
-    @Param('id') id: string,
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
     @Body() product: UpdateProductDto,
   ) {
     return this.productsService.updateProduct(id, product);
@@ -55,7 +58,9 @@ export class ProductsController {
   @Delete('id')
   @HttpCode(200)
   @UseGuards(AuthGuard)
-  async deleteProduct(@Param('id') id: string) {
+  async deleteProduct(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ) {
     return this.productsService.deleteProduct(id);
   }
 }
