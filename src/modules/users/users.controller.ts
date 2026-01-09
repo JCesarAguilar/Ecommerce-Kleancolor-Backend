@@ -6,7 +6,6 @@ import {
   HttpCode,
   Param,
   ParseUUIDPipe,
-  Post,
   Put,
   Query,
   UseGuards,
@@ -22,7 +21,7 @@ export class UsersController {
 
   @Get()
   @HttpCode(200)
-  // @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   async getAll(
     @Query('page') page?: number,
     @Query('limit') limit?: number,
@@ -32,17 +31,11 @@ export class UsersController {
 
   @Get(':id')
   @HttpCode(200)
-  // @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   async getById(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
   ): Promise<UserResponseDto | null> {
     return this.usersService.getUserById(id);
-  }
-
-  @Post()
-  @HttpCode(201)
-  async createUser(@Body() user: CreateUserDto) {
-    return this.usersService.createUser(user);
   }
 
   @Put(':id')
@@ -57,7 +50,7 @@ export class UsersController {
 
   @Delete(':id')
   @HttpCode(200)
-  // @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   async deleteUser(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
   ) {

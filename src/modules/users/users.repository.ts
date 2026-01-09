@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { User } from './entities/user.entity';
 import { UserResponseDto } from './dtos/user-response.dto';
 import { CreateUserDto } from './dtos/create-user.dto';
@@ -57,11 +57,10 @@ export class UserRepository {
   async createUser(user: CreateUserDto): Promise<User> {
     try {
       const newUser = this.usersRepository.create(user);
-      const savedUser = await this.usersRepository.save(newUser);
-      return savedUser;
+      return this.usersRepository.save(newUser);
     } catch (err) {
       console.error(err);
-      throw new NotFoundException('Error creating User');
+      throw new InternalServerErrorException('Error creating User');
     }
   }
 
@@ -77,7 +76,7 @@ export class UserRepository {
       : `User with id ${id} not found.`;
   }
 
-  async findByEmail(email: string): Promise<User | null> {
-    return this.usersRepository.findOneBy({ email });
+  async getUserByEmail(email: string): Promise<User | null> {
+    return this.usersRepository.findOne({ where: { email } });
   }
 }
