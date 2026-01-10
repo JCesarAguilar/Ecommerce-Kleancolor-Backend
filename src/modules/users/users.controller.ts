@@ -12,8 +12,8 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UserResponseDto } from './dtos/user-response.dto';
-import { CreateUserDto } from './dtos/create-user.dto';
 import { AuthGuard } from '../auth/guards/auth.guard';
+import { UpdateUserDto } from './dtos/update-user.dto';
 
 @Controller('/users')
 export class UsersController {
@@ -43,7 +43,7 @@ export class UsersController {
   @UseGuards(AuthGuard)
   async updateUser(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
-    @Body() userInfo: CreateUserDto,
+    @Body() userInfo: UpdateUserDto,
   ) {
     return this.usersService.updateUser(id, userInfo);
   }

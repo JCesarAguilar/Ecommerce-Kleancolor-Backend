@@ -1,7 +1,12 @@
-export interface UpdateProductDto {
-  name?: string;
-  description?: string;
-  price?: number;
-  stock?: number;
-  imgUrl?: string;
-}
+import { PartialType, PickType } from '@nestjs/swagger';
+import { CreateProductDto } from './create-product.dto';
+
+export class UpdateProductDto extends PartialType(
+  PickType(CreateProductDto, [
+    'name',
+    'description',
+    'price',
+    'stock',
+    'imgUrl',
+  ] as const),
+) {}

@@ -13,8 +13,8 @@ import {
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { Product } from './entities/product.entity';
-import type { CreateProductDto } from './dtos/create-product.dto';
-import type { UpdateProductDto } from './dtos/update-product.dto';
+import { CreateProductDto } from './dtos/create-product.dto';
+import { UpdateProductDto } from './dtos/update-product.dto';
 import { AuthGuard } from '../auth/guards/auth.guard';
 
 @Controller('/products')
@@ -45,7 +45,7 @@ export class ProductsController {
     return this.productsService.createProduct(product);
   }
 
-  @Put('id')
+  @Put(':id')
   @HttpCode(200)
   @UseGuards(AuthGuard)
   async updateProduct(
@@ -55,7 +55,7 @@ export class ProductsController {
     return this.productsService.updateProduct(id, product);
   }
 
-  @Delete('id')
+  @Delete(':id')
   @HttpCode(200)
   @UseGuards(AuthGuard)
   async deleteProduct(

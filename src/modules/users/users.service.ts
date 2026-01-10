@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { UserRepository } from './users.repository';
 import { UserResponseDto } from './dtos/user-response.dto';
-import { CreateUserDto } from './dtos/create-user.dto';
 import { User } from './entities/user.entity';
+import { UpdateUserDto } from './dtos/update-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -18,12 +18,27 @@ export class UsersService {
     return user;
   }
 
-  async updateUser(id: string, user: CreateUserDto): Promise<User | null> {
-    return this.userRepository.updateUser(id, user);
+  async updateUser(
+    id: string,
+    data: UpdateUserDto,
+  ): Promise<{ statusCode: number; message: string }> {
+    const result = await this.userRepository.updateUser(id, data);
+
+    if (!result.affected && result.affected === 0)
+      throw new NotFoundException(`User with id: ${id} not found`);
+
+    return { statusCode: 200, message: `User with id: ${id} updated` };
   }
 
-  async deleteUser(id: string): Promise<string> {
-    return this.userRepository.deleteUser(id);
+  async deleteUser(
+    id: string,
+  ): Promise<{ statusCode: number; message: string }> {
+    const result = await this.userRepository.deleteUser(id);
+
+    if (!result.affected && result.affected === 0)
+      throw new NotFoundException(`User with id: ${id} not found`);
+
+    return { statusCode: 200, message: `User with id: ${id} deleted` };
   }
 
   async findByEmail(email: string): Promise<User | null> {

@@ -4,6 +4,9 @@ import { UserResponseDto } from './dtos/user-response.dto';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { DeleteResult } from 'typeorm/browser';
+import { UpdateResult } from 'typeorm/browser';
+import { UpdateUserDto } from './dtos/update-user.dto';
 
 @Injectable()
 export class UserRepository {
@@ -64,16 +67,12 @@ export class UserRepository {
     }
   }
 
-  async updateUser(id: string, data: CreateUserDto): Promise<User | null> {
-    await this.usersRepository.update(id, data);
-    return this.usersRepository.findOneBy({ id });
+  async updateUser(id: string, data: UpdateUserDto): Promise<UpdateResult> {
+    return this.usersRepository.update(id, data);
   }
 
-  async deleteUser(id: string): Promise<string> {
-    const result = await this.usersRepository.delete(id);
-    return result.affected
-      ? `User with id ${id} deleted.`
-      : `User with id ${id} not found.`;
+  async deleteUser(id: string): Promise<DeleteResult> {
+    return this.usersRepository.delete(id);
   }
 
   async getUserByEmail(email: string): Promise<User | null> {

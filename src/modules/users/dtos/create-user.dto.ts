@@ -33,7 +33,7 @@ export class CreateUserDto {
 
   @IsOptional()
   @IsString()
-  @Length(5, 20)
+  @Length(4, 20)
   country?: string;
 
   @IsOptional()
@@ -43,6 +43,6 @@ export class CreateUserDto {
 
   @IsOptional()
   @IsString()
-  @Length(5, 20)
+  @Length(3, 20)
   city?: string;
 }

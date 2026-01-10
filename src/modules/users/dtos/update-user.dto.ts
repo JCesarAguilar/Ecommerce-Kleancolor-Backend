@@ -1,9 +1,12 @@
-export interface UpdateUserDto {
-  name?: string;
-  email?: string;
-  password?: string;
-  phone?: number;
-  address?: string;
-  country?: string;
-  city?: string;
-}
+import { PartialType, PickType } from '@nestjs/swagger';
+import { CreateUserDto } from './create-user.dto';
+
+export class UpdateUserDto extends PartialType(
+  PickType(CreateUserDto, [
+    'name',
+    'phone',
+    'address',
+    'country',
+    'city',
+  ] as const),
+) {}
