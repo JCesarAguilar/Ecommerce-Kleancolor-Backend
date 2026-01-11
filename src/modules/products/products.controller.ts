@@ -16,6 +16,8 @@ import { Product } from './entities/product.entity';
 import { CreateProductDto } from './dtos/create-product.dto';
 import { UpdateProductDto } from './dtos/update-product.dto';
 import { AuthGuard } from '../auth/guards/auth.guard';
+import { Role } from '../auth/enums/roles.enum';
+import { Auth } from '../auth/decorators/auth.decorator';
 
 @Controller('/products')
 export class ProductsController {
@@ -47,7 +49,7 @@ export class ProductsController {
 
   @Put(':id')
   @HttpCode(200)
-  @UseGuards(AuthGuard)
+  @Auth(Role.ADMIN)
   async updateProduct(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
     @Body() product: UpdateProductDto,

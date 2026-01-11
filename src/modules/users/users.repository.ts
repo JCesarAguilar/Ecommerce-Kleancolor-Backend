@@ -19,21 +19,33 @@ export class UserRepository {
     const users = await this.usersRepository.find({
       skip: (page - 1) * limit,
       take: limit,
-      select: ['id', 'name', 'email', 'phone', 'address', 'country', 'city'],
+      select: [
+        'id',
+        'name',
+        'email',
+        'phone',
+        'address',
+        'country',
+        'city',
+        'role',
+      ],
     });
 
-    return users.map(({ id, name, email, phone, address, country, city }) => ({
-      id,
-      name,
-      email,
-      phone,
-      address,
-      country,
-      city,
-    }));
+    return users.map(
+      ({ id, name, email, phone, address, country, city, role }) => ({
+        id,
+        name,
+        email,
+        phone,
+        address,
+        country,
+        city,
+        role,
+      }),
+    );
   }
 
-  async getUserById(id: string): Promise<UserResponseDto | null> {
+  async getUserById(id: string): Promise<Omit<UserResponseDto, 'role'> | null> {
     const userFounded = await this.usersRepository.findOne({
       where: { id },
       relations: { orders: true },

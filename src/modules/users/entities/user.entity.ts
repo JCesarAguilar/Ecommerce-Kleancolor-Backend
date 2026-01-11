@@ -1,3 +1,4 @@
+import { Role } from 'src/modules/auth/enums/roles.enum';
 import { Order } from 'src/modules/orders/entities/order.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
@@ -28,6 +29,14 @@ export class User {
 
   @Column({ length: 50, nullable: true })
   city?: string;
+
+  @Column({
+    type: 'enum',
+    enum: Role,
+    default: Role.USER,
+    nullable: false,
+  })
+  role: string;
 
   @OneToMany(() => Order, (order) => order.user)
   orders: Order[];

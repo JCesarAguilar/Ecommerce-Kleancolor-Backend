@@ -7,8 +7,9 @@ import * as bcrypt from 'bcrypt';
 import { UserRepository } from '../users/users.repository';
 import { LoginUserDto } from './dtos/login-user.dto';
 import { CreateUserDto } from '../users/dtos/create-user.dto';
-import { UserResponseDto } from '../users/dtos/user-response.dto';
 import { JwtService } from '@nestjs/jwt';
+import { Role } from './enums/roles.enum';
+import { UserResponseDto } from '../users/dtos/user-response.dto';
 
 @Injectable()
 export class AuthService {
@@ -18,10 +19,10 @@ export class AuthService {
   ) {}
 
   async signUp(newUserInfo: CreateUserDto): Promise<UserResponseDto> {
-    const userExist = await this.usersRepository.getUserByEmail(
+    const userFounded = await this.usersRepository.getUserByEmail(
       newUserInfo.email,
     );
-    if (userExist) throw new BadRequestException('Email already exist');
+    if (userFounded) throw new BadRequestException('Email already exist');
 
     const hashedPassword: string = await bcrypt.hash(newUserInfo.password, 10);
     if (!hashedPassword)
@@ -31,27 +32,36 @@ export class AuthService {
       ...newUserInfo,
       password: hashedPassword,
     });
-    const { password, ...userWithOutPassword } = newUser;
-    return userWithOutPassword;
+
+    const { password: _password, role: _role, ...safeUser } = newUser;
+    void _password;
+    void _role;
+
+    return safeUser;
   }
 
-  async signIn(credentials: LoginUserDto) {
-    const userExist = await this.usersRepository.getUserByEmail(
+  async signIn(credentials: LoginUserDto): Promise<{ token: string }> {
+    const userFounded = await this.usersRepository.getUserByEmail(
       credentials.email,
     );
 
     const invalid =
-      !userExist ||
-      !(await bcrypt.compare(credentials.password, userExist.password));
+      !userFounded ||
+      !(await bcrypt.compare(credentials.password, userFounded.password));
     if (invalid) throw new UnauthorizedException('Incorrect credentials');
 
-    const userPayload = {
-      sub: userExist.id,
-      id: userExist.id,
-      email: userExist.email,
+    const role = userFounded.role?.includes(Role.ADMIN)
+      ? Role.ADMIN
+      : Role.USER;
+
+    const payload = {
+      sub: userFounded.id,
+      id: userFounded.id,
+      email: userFounded.email,
+      role: role,
     };
 
-    const token = this.jwtService.sign(userPayload);
+    const token = this.jwtService.sign(payload);
 
     return { token };
   }

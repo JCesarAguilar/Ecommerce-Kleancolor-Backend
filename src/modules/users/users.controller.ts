@@ -14,6 +14,8 @@ import { UsersService } from './users.service';
 import { UserResponseDto } from './dtos/user-response.dto';
 import { AuthGuard } from '../auth/guards/auth.guard';
 import { UpdateUserDto } from './dtos/update-user.dto';
+import { Role } from '../auth/enums/roles.enum';
+import { Auth } from '../auth/decorators/auth.decorator';
 
 @Controller('/users')
 export class UsersController {
@@ -21,7 +23,7 @@ export class UsersController {
 
   @Get()
   @HttpCode(200)
-  @UseGuards(AuthGuard)
+  @Auth(Role.ADMIN)
   async getAll(
     @Query('page') page?: number,
     @Query('limit') limit?: number,
