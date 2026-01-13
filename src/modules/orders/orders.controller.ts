@@ -3,6 +3,8 @@ import {
   Controller,
   Get,
   HttpCode,
+  Param,
+  ParseUUIDPipe,
   Post,
   UseGuards,
 } from '@nestjs/common';
@@ -17,10 +19,12 @@ export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 
   @ApiBearerAuth()
-  @Get()
+  @Get(':id')
   @HttpCode(200)
   @UseGuards(AuthGuard)
-  async getOrderById(id: string) {
+  async getOrderById(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ) {
     return this.ordersService.getOrderById(id);
   }
 

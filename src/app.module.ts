@@ -8,6 +8,7 @@ import typeOrmConfig from './config/typeorm';
 import { CategoriesModule } from './modules/categories/categories.module';
 import { JwtModule } from '@nestjs/jwt';
 import { FileUploadModule } from './modules/file-upload/file-upload.module';
+import { OrdersModule } from './modules/orders/orders.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { FileUploadModule } from './modules/file-upload/file-upload.module';
     ProductsModule,
     CategoriesModule,
     FileUploadModule,
+    OrdersModule,
     JwtModule.register({
       global: true,
       signOptions: {

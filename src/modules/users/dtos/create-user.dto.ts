@@ -25,7 +25,7 @@ export class CreateUserDto {
   @IsEmail()
   @ApiProperty({
     description: 'El email debe ser un mail válido',
-    example: 'correo@gmail.com',
+    example: 'admin@gmail.com',
   })
   email: string;
 
@@ -38,7 +38,7 @@ export class CreateUserDto {
   @ApiProperty({
     description:
       'El contraseña debe  tener mínimo 8 caracteres  y máximo 15, además debe ser robusta.',
-    example: 'Pas$word12',
+    example: 'Pas$word1',
   })
   password: string;
 
