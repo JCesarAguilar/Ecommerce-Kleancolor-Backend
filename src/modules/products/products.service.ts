@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { ProductsRepository } from './products.repository';
 import { Product } from './entities/product.entity';
 import { CreateProductDto } from './dtos/create-product.dto';
@@ -13,10 +17,15 @@ export class ProductsService {
   }
 
   async getProductById(id: string): Promise<Product | null> {
+    const productExist = await this.productRepository.findById(id);
+    if (!productExist) throw new BadRequestException('Product does not exist');
     return this.productRepository.getProductById(id);
   }
 
   async createProduct(product: CreateProductDto): Promise<Product> {
+    const productExist = await this.productRepository.findByName(product.name);
+    if (productExist) throw new BadRequestException('Product already exist');
+
     return this.productRepository.createProduct(product);
   }
 
@@ -38,9 +47,9 @@ export class ProductsService {
     const result = await this.productRepository.deleteProduct(id);
 
     if (!result.affected && result.affected === 0)
-      throw new NotFoundException(`Product with ${id} not found`);
+      throw new NotFoundException(`Product with id:${id} not found`);
 
-    return { statusCode: 200, message: `Product with id: ${id} deleted` };
+    return { statusCode: 200, message: `Product with id:${id} deleted` };
   }
 
   async updateImgUrl(productId: string, imgUrl: string) {

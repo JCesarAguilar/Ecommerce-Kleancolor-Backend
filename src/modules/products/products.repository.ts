@@ -45,6 +45,14 @@ export class ProductsRepository {
   }
 
   async updateImgUrl(id: string, imgUrl: string) {
-    await this.productRepository.update({ id }, { imgUrl });
+    return this.productRepository.update({ id }, { imgUrl });
+  }
+
+  async findByName(name: string): Promise<Product | null> {
+    return this.productRepository.findOne({ where: { name } });
+  }
+
+  async findById(id: string): Promise<Product | null> {
+    return this.productRepository.findOne({ where: { id } });
   }
 }
